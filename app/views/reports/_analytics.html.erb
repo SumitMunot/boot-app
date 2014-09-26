@@ -1,0 +1,84 @@
+<style type="text/css">
+	#chartdiv {
+	width		: 100%;
+	height		: 500px;
+	font-size	: 11px;
+	}			
+</style>
+
+<%= select_tag "Account", options_for_select(@names.collect {|x| [x]}) rescue nil %>
+ 
+<%= label_tag 'start_date', 'Start Date: ' %><%= date_select("Start Date", "start_on") %>&nbsp;
+<%= label_tag 'end_date', 'End Date: ' %><%= date_select("End Date", "end_on") %>
+
+<h3>Analytics for the account response JS</h3>
+<p>
+  <%#= @response_json rescue nil %>
+  <%= @name %>
+</p>
+
+<h3>Users</h3>
+<p>
+  <%= @users rescue nil %>
+</p>
+
+<h3>Sessions</h3>
+<p>
+  <%= @sessions rescue nil %>
+</p>
+
+<h3>Pageviews</h3>
+<p>
+  <%= @pageviews rescue nil %>
+</p>
+
+<br>
+
+<div id="chartdiv"></div>
+
+<script type="text/javascript">
+	var chart = AmCharts.makeChart("chartdiv", {
+    "type": "serial",
+    "theme": "none",
+     "pathToImages":"http://www.amcharts.com/lib/3/images/",
+    "dataProvider": [{
+        "values": "Users",
+        "visits": <%= @users rescue nil %>,
+        "color": "#FF0F00"
+    }, {
+        "values": "Sessions",
+        "visits": <%= @sessions rescue nil %>,
+        "color": "#FF6600"
+    }, {
+        "values": "Pageviews",
+        "visits": <%= @pageviews rescue nil %>,
+        "color": "#FF9E01"
+    }],
+    "valueAxes": [{
+        "axisAlpha": 0,
+        "position": "left",
+        "title": "Google analytics values"
+    }],
+    "startDuration": 1,
+    "graphs": [{
+        "balloonText": "<b>[[category]]: [[value]]</b>",
+        "colorField": "color",
+        "fillAlphas": 0.9,
+        "lineAlpha": 0.2,
+        "type": "column",
+        "valueField": "visits"
+    }],
+    "chartCursor": {
+        "categoryBalloonEnabled": false,
+        "cursorAlpha": 0,
+        "zoomable": false
+    },
+    "categoryField": "values",
+    "categoryAxis": {
+        "gridPosition": "start",
+        "labelRotation": 45
+    },
+    "amExport":{}
+     
+});
+</script>
